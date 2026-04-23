@@ -7,9 +7,7 @@ on:
   workflow_dispatch:
     branches:
       - cucumber-tests-workflow
-concurrency:
-  group: ${{ github.event.number }}
-  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
