@@ -1,4 +1,4 @@
-name: APIM builder
+name: APIM Cucumber Tests
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - master
   workflow_dispatch:
     branches:
-      - master
+      - cucumber-tests-workflow
 concurrency:
   group: ${{ github.event.number }}
   cancel-in-progress: true
