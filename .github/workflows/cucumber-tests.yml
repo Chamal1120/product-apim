@@ -21,39 +21,36 @@ jobs:
     - name: Show hosts
       run: cat /etc/hosts
     - name: Checkout master
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
     - name: Cache Maven packages
       uses: actions/cache@v3
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2
-        restore-keys: ${{ runner.os }}-m2
+        restore-keys: |
+          ${{ runner.os }}-m2
     - name: Set up JDK 21
       uses: actions/setup-java@v2
       with:
         java-version: 21
         distribution: 'temurin'
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
-
-      - name: Setup Docker permissions
-        run: |
-          sudo usermod -aG docker $USER
-          sudo chmod 666 /var/run/docker.sock || true
-          sudo systemctl restart docker || true
-          docker info
-
-      - name: Build product-apim with Test.
-        run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -DskipRestartTests=true -Dmaven.test.skip=true
-
-      - name: Replace keystore files
-        run: |
-          SRC_TRUSTSTORE="all-in-one-apim/modules/integration-v2/client-truststore.jks"
-          SRC_CARBON="all-in-one-apim/modules/integration-v2/wso2carbon.jks"
-          TARGET_DIR="all-in-one-apim/modules/p2-profile/product/target/wso2carbon-core-4.11.18/repository/resources/security"
-          cp "$SRC_TRUSTSTORE" "$TARGET_DIR/client-truststore.jks"
-          cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
-          echo "Keystore files replaced successfully"
-
-      - name: Run Cucumber Tests
-        run: mvn clean install --file all-in-one-apim/modules/integration-v2/pom.xml -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
+    - name: Set up Docker
+      uses: docker/setup-docker-action@v4
+    - name: Setup Docker permissions
+      run: |
+        sudo usermod -aG docker $USER
+        sudo chmod 666 /var/run/docker.sock || true
+        sudo systemctl restart docker || true
+        docker info
+    - name: Build product-apim
+      run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -DskipRestartTests=true -Dmaven.test.skip=true
+    - name: Replace keystore files
+      run: |
+        SRC_TRUSTSTORE="all-in-one-apim/modules/integration-v2/client-truststore.jks"
+        SRC_CARBON="all-in-one-apim/modules/integration-v2/wso2carbon.jks"
+        TARGET_DIR="all-in-one-apim/modules/p2-profile/product/target/wso2carbon-core-4.11.18/repository/resources/security"
+        cp "$SRC_TRUSTSTORE" "$TARGET_DIR/client-truststore.jks"
+        cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
+        echo "Keystore files replaced successfully"
+    - name: Run Cucumber Tests
+      run: mvn clean install --file all-in-one-apim/modules/integration-v2/pom.xml -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
