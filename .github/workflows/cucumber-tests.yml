@@ -66,6 +66,7 @@ jobs:
     - name: Download product artifact
       run: |
         curl -L -o /tmp/wso2am-4.7.0-SNAPSHOT.zip https://github.com/wso2/product-apim/releases/download/v4.7.0-rc2/wso2am-4.7.0-rc2.zip
+        mkdir -p all-in-one-apim/modules/p2-profile/product/target
         mv /tmp/wso2am-4.7.0-SNAPSHOT.zip all-in-one-apim/modules/p2-profile/product/target/
         echo "Product artifact downloaded and renamed successfully"
 
