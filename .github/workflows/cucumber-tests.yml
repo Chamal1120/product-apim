@@ -57,6 +57,9 @@ jobs:
         cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
         echo "Keystore files replaced successfully"
 
+    - name: Build node-app-server Docker image
+      run: docker build -t node-app-server:latest all-in-one-apim/modules/integration-v2/tests-common/testcontainers/src/main/resources/nodeapps
+
     - name: Run Cucumber Tests
       run: |
         cd all-in-one-apim/modules/integration-v2/
