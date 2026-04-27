@@ -46,7 +46,7 @@ jobs:
       run: |
         sudo usermod -aG docker $USER
         sudo chmod 666 /var/run/docker.sock || true
-        sudo systemct
+        sudo systemctl restart docker || true
 
     - name: Build product-apim with Test.
       run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -DskipTests=true
