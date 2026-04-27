@@ -61,4 +61,6 @@ jobs:
         echo "Keystore files replaced successfully"
 
     - name: Run Cucumber Tests
-      run: mvn clean install --file all-in-one-apim/modules/integration-v2/pom.xml -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
+      run: |
+      cd all-in-one-apim/modules/integration-v2/pom.xml
+      mvn clean install -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
