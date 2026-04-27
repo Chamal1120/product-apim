@@ -1292,6 +1292,12 @@
                 <artifactId>org.wso2.charon3.core</artifactId>
                 <version>${charon3.version}</version>
             </dependency>
+            <!-- Added for fixing the cumbersome tests -->
+            <dependency>
+                    <groupId>org.skyscreamer</groupId>
+                    <artifactId>jsonassert</artifactId>
+                    <version>${org.skyscreamer.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1579,6 +1585,30 @@
         <content-based-model-router.policy.version>v1.0</content-based-model-router.policy.version>
         <semantic-model-routing.policy.version>v1.0</semantic-model-routing.policy.version>
         <intelligent-model-routing.policy.version>v1.0</intelligent-model-routing.policy.version>
+
+
+        <!-- Tryna fix the cumbersome tests -->
+        <logback.version>1.2.11</logback.version>
+        <testcontainers.version>2.0.2</testcontainers.version>
+        <jackson.databind.version>2.16.1</jackson.databind.version>
+        <jackson.dataformat.toml.version>2.17.1</jackson.dataformat.toml.version>
+        <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
+        <glassfish.jaxb.version>2.3.1</glassfish.jaxb.version>
+        <findbugs.jsr305.version>3.0.2</findbugs.jsr305.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <json.version>20250107</json.version>
+        <gson.version>2.10.1</gson.version>
+        <gson.version>2.10.1</gson.version>
+        <cucumber.version>7.0.0</cucumber.version>
+        <cucumber.picocontainer.version>7.22.0</cucumber.picocontainer.version>
+        <toml4j.version>0.7.2</toml4j.version>
+        <commons.lang3.version>3.0</commons.lang3.version>
+        <commons.io.version>2.18.0</commons.io.version>
+        <apache.httpclient.version>4.5.14</apache.httpclient.version>
+        <carbon.apimgt.api.version>9.31.94</carbon.apimgt.api.version>
+        <carbon.utils.version>4.10.44</carbon.utils.version>
+        <org.skyscreamer.version>1.5.0</org.skyscreamer.version>
+
     </properties>
 
 </project>
