@@ -54,5 +54,5 @@ jobs:
 
     - name: Run Cucumber Tests
       run: |
-      cd all-in-one-apim/modules/integration-v2/
-      mvn clean install -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
+        cd all-in-one-apim/modules/integration-v2/
+        mvn clean install -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
