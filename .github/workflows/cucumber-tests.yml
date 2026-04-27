@@ -6,7 +6,7 @@ on:
       - master
   workflow_dispatch:
     branches:
-      - master
+      - cucumber-test-workflow-2
 
 concurrency:
   group: ${{ github.event.number || github.run_id }}
@@ -15,6 +15,18 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - id: 1
+            segment: group1
+          - id: 2
+            segment: group2
+          - id: 3
+            segment: group3
+          - id: 4
+            segment: group4
+      fail-fast: false
     steps:
     - name: Run hostname
       run: hostname
@@ -44,31 +56,10 @@ jobs:
     - name: Set up Docker
       uses: docker/setup-docker-action@v5
 
-    - name: Fix Docker socket permissions
-      run: sudo chmod 666 /var/run/docker.sock
-
-    - name: Build node-app-server image
-      working-directory: all-in-one-apim/modules/integration-v2/tests-common/testcontainers/src/main/resources/nodeapps
-      run: |
-        docker build -t node-app-server:local .
-        docker images node-app-server:local
-        docker run --rm node-app-server:local echo "Image works!"
-        sleep 5
-
-    - name: Configure testcontainers
-      run: |
-        echo "pull.policy=org.testcontainers.images.DefaultPullPolicy" > ~/.testcontainers.properties
-
-    - name: Tag image as node-app-server:latest for tests
-      run: |
-        docker tag node-app-server:local node-app-server:latest
-
-    - name: Download product artifact
-      run: |
-        curl -L -o /tmp/wso2am-4.7.0-rc2.zip https://github.com/wso2/product-apim/releases/download/v4.7.0-rc2/wso2am-4.7.0-rc2.zip
-        unzip -o /tmp/wso2am-4.7.0-rc2.zip -d all-in-one-apim/modules/p2-profile/product/target
-        mv all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT-temp 2>/dev/null || true
-        echo "Product artifact downloaded and extracted successfully"
+    - name: Build product-apim with Test
+      run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -DskipRestartTests=true
+      env:
+        PRODUCT_APIM_TEST_GROUPS: ${{ matrix.segment }}
 
     - name: Replace keystore files
       run: |
