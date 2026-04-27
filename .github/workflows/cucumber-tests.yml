@@ -63,18 +63,19 @@ jobs:
       run: |
         docker tag node-app-server:local node-app-server:latest
 
-    - name: Download product artifact
+- name: Download product artifact
       run: |
-        curl -L -o /tmp/wso2am-4.7.0-SNAPSHOT.zip https://github.com/wso2/product-apim/releases/download/v4.7.0-rc2/wso2am-4.7.0-rc2.zip
-        mkdir -p all-in-one-apim/modules/p2-profile/product/target
-        mv /tmp/wso2am-4.7.0-SNAPSHOT.zip all-in-one-apim/modules/p2-profile/product/target/
-        echo "Product artifact downloaded and renamed successfully"
+        curl -L -o /tmp/wso2am-4.7.0-rc2.zip https://github.com/wso2/product-apim/releases/download/v4.7.0-rc2/wso2am-4.7.0-rc2.zip
+        unzip -o /tmp/wso2am-4.7.0-rc2.zip -d all-in-one-apim/modules/p2-profile/product/target
+        mv all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT-temp 2>/dev/null || true
+        echo "Product artifact downloaded and extracted successfully"
 
     - name: Replace keystore files
       run: |
         SRC_TRUSTSTORE="all-in-one-apim/modules/integration-v2/client-truststore.jks"
         SRC_CARBON="all-in-one-apim/modules/integration-v2/wso2carbon.jks"
-        TARGET_DIR="all-in-one-apim/modules/p2-profile/product/target/wso2carbon-core-4.11.18/repository/resources/security"
+        TARGET_DIR="all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT/repository/resources/security"
+        mkdir -p "$TARGET_DIR"
         cp "$SRC_TRUSTSTORE" "$TARGET_DIR/client-truststore.jks"
         cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
         echo "Keystore files replaced successfully"
