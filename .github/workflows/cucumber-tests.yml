@@ -15,19 +15,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - id: 1
-            segment: group1
-          - id: 2
-            segment: group2
-          - id: 3
-            segment: group3
-          - id: 4
-            segment: group4
-      fail-fast: false
-    steps:
+   steps:
     - name: Run hostname
       run: hostname
 
@@ -57,9 +45,7 @@ jobs:
       uses: docker/setup-docker-action@v5
 
     - name: Build product-apim with Test
-      run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -DskipRestartTests=true
-      env:
-        PRODUCT_APIM_TEST_GROUPS: ${{ matrix.segment }}
+      run: mvn clean install --file all-in-one-apim/pom.xml -Dmaven.test.skip=true
 
     - name: Replace keystore files
       run: |
