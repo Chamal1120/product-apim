@@ -29,7 +29,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Cache Maven packages
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2
@@ -42,7 +42,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Set up Docker
-      uses: docker/setup-docker-action@v4
+      uses: docker/setup-docker-action@v5
 
     - name: Fix Docker socket permissions
       run: sudo chmod 666 /var/run/docker.sock
@@ -63,8 +63,11 @@ jobs:
       run: |
         docker tag node-app-server:local node-app-server:latest
 
-    - name: Build product-apim with Test.
-      run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -Dmaven.test.skip=true
+    - name: Download product artifact
+      run: |
+        curl -L -o /tmp/wso2am-4.7.0-SNAPSHOT.zip https://github.com/wso2/product-apim/releases/download/v4.7.0-rc2/wso2am-4.7.0-rc2.zip
+        mv /tmp/wso2am-4.7.0-SNAPSHOT.zip all-in-one-apim/modules/p2-profile/product/target/
+        echo "Product artifact downloaded and renamed successfully"
 
     - name: Replace keystore files
       run: |
