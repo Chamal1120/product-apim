@@ -37,17 +37,8 @@ jobs:
         java-version: 21
         distribution: 'temurin'
 
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '10.x'
-
     - name: Set up Docker
       uses: docker/setup-docker-action@v4
-    - name: Setup Docker permissions
-      run: |
-        sudo usermod -aG docker $USER
-        sudo chmod 666 /var/run/docker.sock || true
-        sudo systemctl restart docker || true
 
     - name: Build product-apim with Test.
       run: mvn clean install --file all-in-one-apim/pom.xml -DskipBenchMarkTest=true -Dmaven.test.skip=true
@@ -63,5 +54,5 @@ jobs:
 
     - name: Run Cucumber Tests
       run: |
-      cd all-in-one-apim/modules/integration-v2/pom.xml
+      cd all-in-one-apim/modules/integration-v2/
       mvn clean install -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
