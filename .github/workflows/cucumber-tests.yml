@@ -6,6 +6,7 @@ on:
       - master
   workflow_dispatch:
     branches:
+      - master
       - cucumber-test-workflow-2
 jobs:
   build:
