@@ -20,6 +20,7 @@ package org.wso2.am.testcontainers;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +35,8 @@ public class NodeAppServer {
 
     public NodeAppServer() {
         logger.info("Initializing NodeAppServer...");
-        container = new GenericContainer<>(System.getProperty("node.docker.image.name"))
-                //expose the app to the host machine
+        container = new GenericContainer<>(DockerImageName.parse(System.getProperty("node.docker.image.name")))
+                .withImagePullPolicy(__ -> false) // image is always built locally before tests run
                 .withExposedPorts(exposedPorts)
                 .withNetwork(ContainerNetwork.SHARED_NETWORK)
                 .withNetworkAliases("nodebackend")
