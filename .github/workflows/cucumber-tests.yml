@@ -41,7 +41,7 @@ jobs:
         java-version: 21
         distribution: 'temurin'
 
-    - name: Build product-apim with Test
+    - name: Build product-apim without tests
       run: mvn clean install --file all-in-one-apim/pom.xml -Dmaven.test.skip=true
 
     - name: Replace keystore files
@@ -54,10 +54,7 @@ jobs:
         cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
         echo "Keystore files replaced successfully"
 
-    - name: Build node-app-server Docker image
-      run: docker build --load -t node-app-server:latest all-in-one-apim/modules/integration-v2/tests-common/testcontainers/src/main/resources/nodeapps
-
     - name: Run Cucumber Tests
+      working-directory: all-in-one-apim/modules/integration-v2/
       run: |
-        cd all-in-one-apim/modules/integration-v2/
         mvn clean install -Ddocker.extra.hosts="--add-host=host.docker.internal:host-gateway"
