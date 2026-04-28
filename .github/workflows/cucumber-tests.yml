@@ -46,13 +46,10 @@ jobs:
 
     - name: Replace keystore files
       run: |
-        SRC_TRUSTSTORE="all-in-one-apim/modules/integration-v2/client-truststore.jks"
-        SRC_CARBON="all-in-one-apim/modules/integration-v2/wso2carbon.jks"
-        TARGET_DIR="all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT/repository/resources/security"
-        mkdir -p "$TARGET_DIR"
-        cp "$SRC_TRUSTSTORE" "$TARGET_DIR/client-truststore.jks"
-        cp "$SRC_CARBON" "$TARGET_DIR/wso2carbon.jks"
-        echo "Keystore files replaced successfully"
+        mkdir -p /tmp/wso2am-4.7.0-SNAPSHOT/repository/resources/security
+        cp all-in-one-apim/modules/integration-v2/client-truststore.jks all-in-one-apim/modules/integration-v2/wso2carbon.jks /tmp/wso2am-4.7.0-SNAPSHOT/repository/resources/security/
+        zip -d all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT.zip "wso2am-4.7.0-SNAPSHOT/repository/resources/security/client-truststore.jks" "wso2am-4.7.0-SNAPSHOT/repository/resources/security/wso2carbon.jks" 2>/dev/null || true
+        cd /tmp && zip -u $GITHUB_WORKSPACE/all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT.zip "wso2am-4.7.0-SNAPSHOT/repository/resources/security/client-truststore.jks" "wso2am-4.7.0-SNAPSHOT/repository/resources/security/wso2carbon.jks"
 
     - name: Run Cucumber Tests
       working-directory: all-in-one-apim/modules/integration-v2/

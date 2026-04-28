@@ -564,6 +564,12 @@ public class BaseSteps {
                     isServerReady = true;
                     break;
             }
+            else {
+                logger.info("\n\nResponse\nCode: {}\nMessage: {}\nBody: {}\n",
+                     response != null ? response.getResponseCode() : "null",
+                     response != null ? response.getResponseMessage() : "null",
+                     response != null ? response.getData() : "null");
+            }
             try {
                 logger.info("Waiting for APIM server to be ready...");
                 Thread.sleep(1000);
