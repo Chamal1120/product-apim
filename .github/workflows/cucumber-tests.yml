@@ -46,10 +46,13 @@ jobs:
 
     - name: Replace keystore files
       run: |
-        mkdir -p /tmp/wso2am-4.7.0-SNAPSHOT/repository/resources/security
-        cp all-in-one-apim/modules/integration-v2/client-truststore.jks all-in-one-apim/modules/integration-v2/wso2carbon.jks /tmp/wso2am-4.7.0-SNAPSHOT/repository/resources/security/
-        zip -d all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT.zip "wso2am-4.7.0-SNAPSHOT/repository/resources/security/client-truststore.jks" "wso2am-4.7.0-SNAPSHOT/repository/resources/security/wso2carbon.jks" 2>/dev/null || true
-        cd /tmp && zip -u $GITHUB_WORKSPACE/all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT.zip "wso2am-4.7.0-SNAPSHOT/repository/resources/security/client-truststore.jks" "wso2am-4.7.0-SNAPSHOT/repository/resources/security/wso2carbon.jks"
+        ZIP_FILE="$GITHUB_WORKSPACE/all-in-one-apim/modules/p2-profile/product/target/wso2am-4.7.0-SNAPSHOT.zip"
+        unzip -q "$ZIP_FILE" -d /tmp/apim-extract
+        cp all-in-one-apim/modules/integration-v2/client-truststore.jks \
+           all-in-one-apim/modules/integration-v2/wso2carbon.jks \
+           /tmp/apim-extract/wso2am-4.7.0-SNAPSHOT/repository/resources/security/
+        rm "$ZIP_FILE"
+        cd /tmp/apim-extract && zip -qr "$ZIP_FILE" .
 
     - name: Run Cucumber Tests
       working-directory: all-in-one-apim/modules/integration-v2/
